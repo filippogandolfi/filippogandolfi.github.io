@@ -70,3 +70,4 @@ src/components/SoundToggle.svelte  ← the Svelte island
 - Your phone number from the PDF CV is intentionally **not** published (`src/data/cv.ts` has a note) — personal sites get scraped. Add it back if you want.
 - The LinkedIn URL in `src/data/cv.ts` is a guess — fix it.
 # ctrlFG
+# ctrlFG
