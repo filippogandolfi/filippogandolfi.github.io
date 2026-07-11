@@ -43,7 +43,7 @@ const { title, description = 'Filippo Gandolfi — Test & Delivery Manager, robo
     </footer>
 
     <script>
-      import { playNavigate, playTick, primeAudio } from '../lib/sounds';
+      import { playNavigate, playScroll, playTick, primeAudio } from '../lib/sounds';
 
       declare global {
         interface Window {
@@ -66,6 +66,30 @@ const { title, description = 'Filippo Gandolfi — Test & Delivery Manager, robo
             const related = event.relatedTarget as Node | null;
             if (!target || (related && target.contains(related))) return;
             playTick();
+          },
+          { passive: true }
+        );
+
+        const coarsePointer = window.matchMedia('(pointer: coarse)');
+        let lastScrollY = window.scrollY;
+        let lastScrollSoundAt = 0;
+        let scrollDistance = 0;
+
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!coarsePointer.matches) return;
+
+            const scrollY = window.scrollY;
+            scrollDistance += Math.abs(scrollY - lastScrollY);
+            lastScrollY = scrollY;
+
+            const now = performance.now();
+            if (scrollDistance < 120 || now - lastScrollSoundAt < 160) return;
+
+            scrollDistance = 0;
+            lastScrollSoundAt = now;
+            playScroll();
           },
           { passive: true }
         );

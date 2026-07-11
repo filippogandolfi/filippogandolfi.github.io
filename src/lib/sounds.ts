@@ -69,6 +69,11 @@ export function playTick() {
   blip(900, 900, 0.045, 'triangle', 0.035);
 }
 
+/** Tiny paper-rustle tick for mobile scrolling */
+export function playScroll() {
+  blip(620, 760, 0.035, 'triangle', 0.018);
+}
+
 /** Cheerful two-note chirp for turning sounds ON */
 export function playHello() {
   blip(523, 523, 0.09, 'sine');
@@ -84,5 +89,6 @@ export function primeAudio() {
   // pointerdown fires before click completes, so the context is often
   // already running by the time the navigation sound is requested.
   window.addEventListener('pointerdown', prime, { passive: true });
+  window.addEventListener('touchstart', prime, { passive: true });
   window.addEventListener('keydown', prime);
 }
