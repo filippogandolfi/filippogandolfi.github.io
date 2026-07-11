@@ -6,7 +6,7 @@ export async function GET(context) {
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
   );
   return rss({
-    title: "Filippo Gandolfi — Diary",
+    title: "ctrlFG — Diary",
     description: 'Notes, experiments and photos from work and life.',
     site: context.site,
     items: posts.map((post) => ({

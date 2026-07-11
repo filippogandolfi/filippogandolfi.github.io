@@ -1,8 +1,8 @@
 /**
  * Tiny synthesized UI sounds — no audio files, just the Web Audio API.
- * Everything is gated on:
- *   1. user preference (localStorage 'fg-sounds', default ON)
- *   2. browser autoplay policy (context resumes on first interaction)
+ * Browsers keep the AudioContext suspended until the first user gesture;
+ * we resume it on that gesture and QUEUE the sound until resume completes,
+ * so even the very first click makes noise.
  */
 
 let ctx: AudioContext | null = null;
@@ -25,14 +25,10 @@ function getCtx(): AudioContext | null {
     if (!AC) return null;
     ctx = new AC();
   }
-  if (ctx.state === 'suspended') void ctx.resume();
   return ctx;
 }
 
-function blip(freqFrom: number, freqTo: number, duration: number, type: OscillatorType = 'sine', gainPeak = 0.08) {
-  if (!soundsEnabled()) return;
-  const ac = getCtx();
-  if (!ac || ac.state !== 'running') return;
+function schedule(ac: AudioContext, freqFrom: number, freqTo: number, duration: number, type: OscillatorType, gainPeak: number) {
   const t0 = ac.currentTime;
   const osc = ac.createOscillator();
   const gain = ac.createGain();
@@ -45,6 +41,22 @@ function blip(freqFrom: number, freqTo: number, duration: number, type: Oscillat
   osc.connect(gain).connect(ac.destination);
   osc.start(t0);
   osc.stop(t0 + duration + 0.02);
+}
+
+function blip(freqFrom: number, freqTo: number, duration: number, type: OscillatorType = 'sine', gainPeak = 0.08) {
+  if (!soundsEnabled()) return;
+  const ac = getCtx();
+  if (!ac) return;
+  if (ac.state === 'running') {
+    schedule(ac, freqFrom, freqTo, duration, type, gainPeak);
+  } else {
+    // Wake the context and play as soon as it's ready (~ms after the gesture).
+    // If the browser rejects (no gesture yet), stay silent — no error spam.
+    void ac.resume().then(
+      () => schedule(ac, freqFrom, freqTo, duration, type, gainPeak),
+      () => {}
+    );
+  }
 }
 
 /** Soft "swoosh-pop" when a page transition completes */
@@ -66,10 +78,11 @@ export function playHello() {
 /** Warm the AudioContext up on the first user gesture (autoplay policy) */
 export function primeAudio() {
   const prime = () => {
-    getCtx();
-    window.removeEventListener('pointerdown', prime);
-    window.removeEventListener('keydown', prime);
+    const ac = getCtx();
+    if (ac && ac.state !== 'running') void ac.resume().catch(() => {});
   };
-  window.addEventListener('pointerdown', prime, { once: true });
-  window.addEventListener('keydown', prime, { once: true });
+  // pointerdown fires before click completes, so the context is often
+  // already running by the time the navigation sound is requested.
+  window.addEventListener('pointerdown', prime, { passive: true });
+  window.addEventListener('keydown', prime);
 }
