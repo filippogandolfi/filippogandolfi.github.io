@@ -1,0 +1,69 @@
+---
+import SoundToggle from './SoundToggle.svelte';
+
+const nav = [
+  { href: '/', label: 'CV' },
+  { href: '/blog/', label: 'Diary' },
+];
+const path = Astro.url.pathname;
+---
+
+<div class="sprig-bar" aria-hidden="true"></div>
+<header class="site-header">
+  <div class="wrap row">
+    <a href="/" class="wordmark" data-sound="tick">FG<span class="dot">.</span></a>
+    <nav aria-label="Main">
+      {
+        nav.map(({ href, label }) => (
+          <a
+            href={href}
+            data-sound="tick"
+            aria-current={path === href || (href !== '/' && path.startsWith(href)) ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+    <SoundToggle client:load />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    padding: 0.9rem 0;
+    border-bottom: 2px dashed var(--fern);
+    background: var(--paper);
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: var(--fern-deep);
+  }
+  .wordmark .dot { color: var(--leaf); }
+  nav {
+    display: flex;
+    gap: 1.1rem;
+    flex: 1;
+  }
+  nav a {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: var(--moss);
+    padding: 0.1em 0.2em;
+  }
+  nav a:hover { color: var(--leaf); }
+  nav a[aria-current='page'] {
+    color: var(--fern-deep);
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, var(--leaf) 0 50%, var(--moss) 50% 100%) 1;
+  }
+</style>

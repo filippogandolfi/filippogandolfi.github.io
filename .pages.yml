@@ -1,0 +1,44 @@
+media:
+  - name: photos
+    label: Photos
+    input: src/assets/blog
+    output: ../../assets/blog
+
+content:
+  - name: posts
+    label: Diary posts
+    type: collection
+    path: src/content/blog
+    view:
+      fields: [title, date, tags]
+      sort: [date]
+    filename: '{year}-{month}-{day}-{fields.title}.md'
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: description
+        label: Short description
+        type: string
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: cover
+        label: Cover photo
+        type: image
+      - name: coverAlt
+        label: Cover alt text
+        type: string
+      - name: body
+        label: Body
+        type: rich-text

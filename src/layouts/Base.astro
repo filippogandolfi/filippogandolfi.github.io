@@ -1,0 +1,64 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Filippo Gandolfi — Test & Delivery Manager, robotics and biomedical engineer. CV and personal diary.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+    <link rel="alternate" type="application/rss+xml" title="Filippo's diary" href={new URL('rss.xml', Astro.site)} />
+    <ClientRouter />
+  </head>
+  <body>
+    <Header />
+    <main class="wrap">
+      <slot />
+    </main>
+    <footer class="site">
+      <div class="wrap">
+        <span class="sprig-mark" aria-hidden="true"></span>
+        Built with Astro, deployed on GitHub Pages, powered by espresso.
+        <a href="/rss.xml" data-sound="tick">RSS</a>
+      </div>
+    </footer>
+
+    <script>
+      import { playNavigate, playTick, primeAudio } from '../lib/sounds';
+
+      primeAudio();
+
+      // Chirp when a client-side page transition lands
+      document.addEventListener('astro:after-swap', () => {
+        playNavigate();
+      });
+
+      // Soft tick on nav link hovers — re-bound after every swap
+      function bindTicks() {
+        document.querySelectorAll<HTMLElement>('[data-sound="tick"]').forEach((el) => {
+          el.addEventListener('mouseenter', playTick, { passive: true });
+        });
+      }
+      bindTicks();
+      document.addEventListener('astro:page-load', bindTicks);
+    </script>
+  </body>
+</html>

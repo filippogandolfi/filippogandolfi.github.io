@@ -1,0 +1,172 @@
+/* ---------------------------------------------------------------
+   Filippo Gandolfi — personal site
+   Tokens: green paper / ferns / leaf & moss accents
+   --------------------------------------------------------------- */
+
+:root {
+  /* Palette — all green, lkhrs-style */
+  --paper: #f3f6ec;        /* soft green-tinted paper */
+  --paper-deep: #e4ecd6;   /* panels, code blocks */
+  --ink: #232b1f;
+  --ink-soft: #55614b;
+  --fern: #3f6b3f;         /* the green: headings, accents */
+  --fern-deep: #2c4f2c;
+  --fern-soft: #d9e7c6;    /* tag pills, highlights */
+  --leaf: #587f31;         /* bright accent: dates, hovers, sparks */
+  --moss: #1f3d2b;         /* deep accent: links, strong text */
+
+  /* Type */
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-body: 'Atkinson Hyperlegible', 'Trebuchet MS', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --measure: 44rem;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  scroll-behavior: smooth;
+}
+
+body { margin: 0; }
+
+/* --- Signature: the sprig stripe (bright leaf + deep moss) --------- */
+.sprig-bar {
+  height: 8px;
+  background: linear-gradient(90deg, var(--leaf) 0 50%, var(--moss) 50% 100%);
+}
+.sprig-mark {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  background: linear-gradient(90deg, var(--leaf) 0 50%, var(--moss) 50% 100%);
+  border-radius: 2px;
+  transform: rotate(-4deg);
+}
+
+/* --- Layout ------------------------------------------------------ */
+.wrap {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* --- Typography --------------------------------------------------- */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--fern-deep);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0.2em 0;
+}
+
+h2 {
+  font-size: 1.7rem;
+  margin: 2.2em 0 0.6em;
+}
+
+h3 {
+  font-size: 1.15rem;
+  margin: 1.4em 0 0.3em;
+}
+
+a {
+  color: var(--moss);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: color 120ms ease;
+}
+a:hover { color: var(--leaf); }
+a:focus-visible {
+  outline: 3px solid var(--leaf);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+code {
+  background: var(--paper-deep);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+pre {
+  background: var(--paper-deep);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+  margin: 1.2em 0;
+  padding: 0.2em 1em;
+  border-left: 6px solid;
+  border-image: linear-gradient(var(--leaf) 0 50%, var(--moss) 50% 100%) 1;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+img { max-width: 100%; height: auto; border-radius: 8px; }
+
+/* --- Tag pills ---------------------------------------------------- */
+.pill {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--fern-soft);
+  color: var(--fern-deep);
+  border-radius: 999px;
+  padding: 0.15em 0.7em;
+  margin: 0 0.3em 0.3em 0;
+  white-space: nowrap;
+}
+
+/* --- Cards / panels ------------------------------------------------ */
+.panel {
+  background: var(--paper-deep);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+/* --- View transitions: playful but polite -------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes slide-up-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes drop-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-14px); }
+  }
+  ::view-transition-old(root) {
+    animation: drop-out 180ms cubic-bezier(0.4, 0, 1, 1) both;
+  }
+  ::view-transition-new(root) {
+    animation: slide-up-in 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/* --- Footer -------------------------------------------------------- */
+footer.site {
+  margin-top: 4rem;
+  padding: 2rem 0 3rem;
+  border-top: 2px dashed var(--fern);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}

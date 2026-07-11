@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<Base title="Diary — Filippo Gandolfi" description="Notes, experiments and photos from work and life.">
+  <h1 transition:name="site-title">Diary</h1>
+  <p class="lede">
+    Experiences worth remembering: projects, experiments, trips, and the occasional heroic save.
+  </p>
+
+  {posts.length === 0 && <p class="panel">Nothing here yet — the first entry is on its way.</p>}
+
+  <ul class="posts">
+    {
+      posts.map((post) => (
+        <li>
+          <a href={`/blog/${post.id}/`} class="post-card" data-sound="tick">
+            {post.data.cover && (
+              <Image
+                src={post.data.cover}
+                alt={post.data.coverAlt ?? ''}
+                width={220}
+                height={160}
+                class="thumb"
+                transition:name={`cover-${post.id}`}
+              />
+            )}
+            <span class="meta">
+              <span class="date mono">{fmt.format(post.data.date)}</span>
+              <span class="title" transition:name={`title-${post.id}`}>{post.data.title}</span>
+              {post.data.description && <span class="desc">{post.data.description}</span>}
+              <span class="tags">
+                {post.data.tags.map((t) => (
+                  <span class="pill">{t}</span>
+                ))}
+              </span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
+
+<style>
+  .lede { color: var(--ink-soft); max-width: 55ch; }
+  .posts { list-style: none; padding: 0; display: grid; gap: 1rem; }
+  .post-card {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    text-decoration: none;
+    color: inherit;
+    background: var(--paper-deep);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 2px solid transparent;
+    transition: transform 140ms ease, border-color 140ms ease;
+  }
+  .post-card:hover {
+    transform: rotate(-0.6deg) translateY(-2px);
+    border-color: var(--fern);
+    color: inherit;
+  }
+  .thumb { border-radius: 8px; flex-shrink: 0; object-fit: cover; }
+  .meta { display: flex; flex-direction: column; gap: 0.2rem; }
+  .date { font-size: 0.72rem; color: var(--leaf); }
+  .title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--fern-deep);
+  }
+  .desc { color: var(--ink-soft); font-size: 0.95rem; }
+  .tags { margin-top: 0.3rem; }
+  @media (max-width: 560px) {
+    .post-card { flex-direction: column; }
+    .thumb { width: 100%; height: auto; }
+  }
+</style>
