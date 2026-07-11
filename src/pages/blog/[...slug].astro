@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import { sitePath } from '../../lib/paths';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -41,7 +42,7 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', ye
       <Content />
     </div>
     <p class="back">
-      <a href="/blog/" data-sound="tick">← back to the diary</a>
+      <a href={sitePath('/blog/')} data-sound="tick">← back to the diary</a>
     </p>
   </article>
 </Base>
