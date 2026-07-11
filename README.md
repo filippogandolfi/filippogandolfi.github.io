@@ -9,6 +9,7 @@ Personal site built with [Astro](https://astro.build). CV on the homepage, blog 
 ```bash
 npm install
 npm run dev        # http://localhost:4321
+npm run check      # Astro content + TypeScript checks
 npm run build      # static output in dist/
 ```
 
@@ -68,8 +69,3 @@ src/components/SoundToggle.svelte  ← the Svelte island
 ## Notes
 
 - Your phone number from the PDF CV is intentionally **not** published (`src/data/cv.ts` has a note) — personal sites get scraped. Add it back if you want.
-- The LinkedIn URL in `src/data/cv.ts` is a guess — fix it.
-# ctrlFG
-# ctrlFG
-# ctrlFG
-# ctrlFG
