@@ -71,7 +71,7 @@ export function playTick() {
 
 /** Tiny paper-rustle tick for mobile scrolling */
 export function playScroll() {
-  blip(620, 760, 0.035, 'triangle', 0.018);
+  blip(620, 760, 0.028, 'triangle', 0.007);
 }
 
 /** Cheerful two-note chirp for turning sounds ON */

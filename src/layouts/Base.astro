@@ -85,7 +85,7 @@ const { title, description = 'Filippo Gandolfi — Test & Delivery Manager, robo
             lastScrollY = scrollY;
 
             const now = performance.now();
-            if (scrollDistance < 120 || now - lastScrollSoundAt < 160) return;
+            if (scrollDistance < 200 || now - lastScrollSoundAt < 260) return;
 
             scrollDistance = 0;
             lastScrollSoundAt = now;
