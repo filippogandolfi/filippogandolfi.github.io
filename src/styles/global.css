@@ -31,7 +31,6 @@ html {
   font-family: var(--font-body);
   font-size: 17px;
   line-height: 1.65;
-  scroll-behavior: smooth;
 }
 
 body { margin: 0; }
@@ -146,6 +145,8 @@ img { max-width: 100%; height: auto; border-radius: 8px; }
 
 /* --- View transitions: playful but polite -------------------------- */
 @media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+
   @keyframes slide-up-in {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
