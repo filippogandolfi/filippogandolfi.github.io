@@ -154,6 +154,21 @@ export const extras = {
     { lang: 'Italian', level: 'native' },
     { lang: 'English', level: 'upper-intermediate (B2)' },
   ],
-  other: `Between 2016 and 2021 I was a Scientific Animator at the "Festival della Scienza" in Genoa — which taught me how to explain science to a live audience without putting them to sleep.`,
-  hobbies: `Fanatic of technology and all electronic devices. Football since childhood: former Pro-Team, now defending amateur-league goals with pride.`,
+  // Cards with an `href` become clickable and link to a page or diary post.
+  cards: [
+    {
+      title: 'Curling timer',
+      body: `Joined the curling world as a Timer in 2025 at the University Winter Games in Turin — then in 2026 as official timekeeper at the Milano-Cortina Olympic Games!`,
+      href: '/blog/2026-02-22-milano-cortina-timekeeper/',
+      linkLabel: 'read the story',
+    },
+    {
+      title: 'On stage',
+      body: `Between 2016 and 2021 I was a Scientific Animator at the "Festival della Scienza" in Genoa — which taught me how to explain science to a live audience without putting them to sleep.`,
+    },
+    {
+      title: 'Between the posts',
+      body: `Fanatic of technology and all electronic devices. Football since childhood: former Pro-Team, now defending amateur-league goals with pride.`,
+    },
+  ],
 };

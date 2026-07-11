@@ -21,6 +21,13 @@ import { profile, experiences, projectGroups, education, extras } from '../data/
     </div>
   </section>
 
+  <nav class="toc" aria-label="Sections">
+    <a href="#work" data-sound="tick"><span class="sprig-mark" aria-hidden="true"></span>Work experience</a>
+    <a href="#projects" data-sound="tick"><span class="sprig-mark" aria-hidden="true"></span>Projects</a>
+    <a href="#education" data-sound="tick"><span class="sprig-mark" aria-hidden="true"></span>Education</a>
+    <a href="#more" data-sound="tick"><span class="sprig-mark" aria-hidden="true"></span>Everything else</a>
+  </nav>
+
   <section aria-labelledby="work">
     <h2 id="work"><span class="sprig-mark" aria-hidden="true"></span>Work experience</h2>
     {
@@ -99,20 +106,96 @@ import { profile, experiences, projectGroups, education, extras } from '../data/
           ))}
         </ul>
       </div>
-      <div class="panel">
-        <h3>On stage</h3>
-        <p>{extras.other}</p>
-      </div>
-      <div class="panel">
-        <h3>Between the posts</h3>
-        <p>{extras.hobbies}</p>
-      </div>
+      {
+        extras.cards.map((card) =>
+          card.href ? (
+            <a href={card.href} class="panel card-link" data-sound="tick">
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+              <span class="read-more mono">{card.linkLabel ?? 'read more'} →</span>
+            </a>
+          ) : (
+            <div class="panel">
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+            </div>
+          )
+        )
+      }
     </div>
   </section>
 </Base>
 
+<script>
+  // Re-trigger the "arrival" animation on every anchor click.
+  // Delegated on document so it survives Astro view-transition swaps.
+  if (!(window as any).__anchorGlow) {
+    (window as any).__anchorGlow = true;
+    document.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest('a[href^="#"]');
+      if (!link) return;
+      const target = document.querySelector<HTMLElement>(link.getAttribute('href')!);
+      if (!target) return;
+      target.classList.remove('anchored');
+      void target.offsetWidth; // restart the CSS animation
+      target.classList.add('anchored');
+      target.addEventListener('animationend', () => target.classList.remove('anchored'), { once: true });
+    });
+  }
+</script>
+
 <style>
   .hero { padding-top: 2.5rem; }
+
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.6rem;
+    margin: 2.2rem 0 0.5rem;
+  }
+  .toc a {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: var(--moss);
+    transition: transform 120ms ease, color 120ms ease;
+  }
+  .toc a:hover {
+    color: var(--leaf);
+    transform: translateY(-1px);
+  }
+  .toc .sprig-mark { transform: rotate(-4deg) scale(0.9); }
+
+  section[aria-labelledby] h2 { scroll-margin-top: 1.5rem; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes arrive-glow {
+      0%   { background-size: 0% 100%; }
+      25%  { background-size: 100% 100%; }
+      70%  { background-size: 100% 100%; }
+      100% { background-size: 0% 100%; }
+    }
+    @keyframes arrive-wiggle {
+      0%, 100% { transform: rotate(-4deg) scale(1); }
+      30%      { transform: rotate(8deg) scale(1.35); }
+      60%      { transform: rotate(-10deg) scale(1.15); }
+    }
+    h2:target,
+    h2.anchored {
+      background-image: linear-gradient(var(--fern-soft), var(--fern-soft));
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-size: 0% 100%;
+      animation: arrive-glow 1.4s ease-out 0.25s;
+      border-radius: 6px;
+    }
+    h2:target .sprig-mark,
+    h2.anchored .sprig-mark {
+      animation: arrive-wiggle 0.7s ease-in-out 0.45s;
+    }
+  }
   .kicker {
     color: var(--leaf);
     letter-spacing: 0.25em;
@@ -169,6 +252,26 @@ import { profile, experiences, projectGroups, education, extras } from '../data/
   }
   .more-grid h3 { margin-top: 0; }
   .more-grid ul { padding-left: 1.1rem; margin: 0; }
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    border: 2px solid transparent;
+    transition: transform 140ms ease, border-color 140ms ease;
+  }
+  .card-link:hover {
+    color: inherit;
+    border-color: var(--fern);
+    transform: rotate(-0.6deg) translateY(-2px);
+  }
+  .card-link p { flex: 1; }
+  .read-more {
+    font-size: 0.75rem;
+    color: var(--leaf);
+    margin-top: 0.5rem;
+  }
+  .card-link:hover .read-more { text-decoration: underline; }
 
   @media (max-width: 560px) {
     .entry { grid-template-columns: 1fr; gap: 0.2rem; }
