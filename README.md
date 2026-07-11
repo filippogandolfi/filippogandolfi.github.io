@@ -71,3 +71,4 @@ src/components/SoundToggle.svelte  ← the Svelte island
 - The LinkedIn URL in `src/data/cv.ts` is a guess — fix it.
 # ctrlFG
 # ctrlFG
+# ctrlFG
