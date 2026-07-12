@@ -2,6 +2,11 @@
 title: Ten days alone in Japan, one plate at a time
 date: 2025-10-27
 description: Me in Japan for 10 days trying to eat as much as possible
+tags:
+  - Japan
+  - Personal
+  - Experience
+  - Ramen
 draft: false
 cover: ../../assets/blog/IMG_0313.jpeg
 coverAlt: Me with Classical Kyoto’s Red/Orange Tori behind
