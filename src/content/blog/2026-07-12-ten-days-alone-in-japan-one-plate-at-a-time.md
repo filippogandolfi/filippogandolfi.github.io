@@ -3,12 +3,12 @@ title: Ten days alone in Japan, one plate at a time
 date: 2025-10-27
 description: Me in Japan for 10 days trying to eat as much as possible
 tags:
-  - Japan
-  - Personal
-  - Experience
-  - Ramen
+  - japan
+  - personal
+  - experience
+  - ramen
 draft: false
-cover: ../../assets/blog/IMG_0313.jpeg
+cover: ../../assets/blog/japan-cover.jpeg
 coverAlt: Me with Classical Kyoto’s Red/Orange Tori behind
 ---
 My first proper meal in Japan was eaten standing up, alone, in front of a vending machine that also happened to be the restaurant’s cashier. I fed it some yen, got a ticket, handed it to a cook through a curtain, and twelve minutes later I was slurping tonkotsu ramen next to six strangers who were all doing exactly the same thing in exactly the same silence. Nobody talked. Nobody needed to. I remember thinking: I could get used to this.

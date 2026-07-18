@@ -20,7 +20,7 @@ export const experiences = [
   {
     period: '2021 — today',
     kind: 'full time',
-    title: 'Quality Assurance Manager',
+    title: 'Manager',
     org: 'Reply — Concept Quality UK',
     body: `Leading testing initiatives and teams across retail, automotive, travel and banking clients: building automation frameworks, defining test strategies and coordinating delivery across technical and business stakeholders. Managing international programmes for functional, UI/UX and performance validation, coordinating testers day to day, and driving new approaches integrating AI, ML and Computer Vision into our test automation stack.`,
     tags: ['Test & Delivery Management', 'Test Automation', 'QA', 'Stakeholder Management', 'AI/ML Research'],
@@ -38,10 +38,26 @@ export const experiences = [
 export const projectGroups = [
   {
     period: '2023 — today',
+    heading: 'Test & Delivery Management',
+    items: [
+      {
+        name: 'Costco International',
+        body: 'Leading test automation for the mobile domain: maintaining and enhancing the Reply framework across Android, iOS and WeChat — 150+ scripts per country, 11 countries, 5 environments. Designed a new performance UI testing framework measuring end-to-end screen transition times.',
+        tags: ['Java', 'Appium', 'OpenCV', 'Cucumber'],
+      },
+      {
+        name: 'easyJet holidays — Contact Centre',
+        body: 'Test Manager for a cloud-native Amazon Connect solution for the Holiday Operations Centre: test strategy, stakeholder alignment and the full testing lifecycle, with automation covering Lambda behaviours, API contracts and end-to-end agent workflows.',
+        tags: ['Amazon Connect', 'AWS Lambda', 'REST/JSON'],
+      },
+    ],
+  },
+  {
+    period: '2021 — today',
     heading: 'R&D at Reply — Concept Quality UK',
     items: [
       {
-        name: 'TESS — Generative AI platform for test automation',
+        name: 'Generative AI platform for test automation',
         body: 'Leading design and development of an AI-driven end-to-end test automation platform with AI agents (Designer, Healer, Analyst, Coder) covering functional, UI, API and microservices testing. Defining product vision and coordinating cross-functional teams.',
         tags: ['AI Agents', 'Generative AI', 'Test Automation'],
       },
@@ -54,22 +70,6 @@ export const projectGroups = [
         name: 'Autonomous Driving AI POC',
         body: "Proof-of-concept on TurtleBot3 Waffle with AI visual algorithms, alongside the University of Toronto's Self-Driving Cars Specialization.",
         tags: ['Python', 'ROS', 'AI'],
-      },
-    ],
-  },
-  {
-    period: '2023 — today',
-    heading: 'Test & Delivery Management',
-    items: [
-      {
-        name: 'Costco International',
-        body: 'Leading test automation for the mobile domain: maintaining and enhancing the Reply framework across Android, iOS and WeChat — 150+ scripts per country, 11 countries, 5 environments. Designed a new performance UI testing framework measuring end-to-end screen transition times.',
-        tags: ['Java', 'Appium', 'OpenCV', 'Cucumber'],
-      },
-      {
-        name: 'easyJet holidays — Contact Centre',
-        body: 'Test Manager for a cloud-native Amazon Connect solution for the Holiday Operations Centre: test strategy, stakeholder alignment and the full testing lifecycle, with automation covering Lambda behaviours, API contracts and end-to-end agent workflows.',
-        tags: ['Amazon Connect', 'AWS Lambda', 'REST/JSON'],
       },
     ],
   },

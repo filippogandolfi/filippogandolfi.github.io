@@ -16,28 +16,124 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const isBookclub = post.data.type === 'bookclub' || post.data.tags.includes('bookclub');
+const bookFacts = post.data.book
+  ? [
+      ['Original title', post.data.book.originalTitle],
+      ['Author', post.data.book.author],
+      ['Translator', post.data.book.translator],
+      ['Publisher', post.data.book.publisher],
+      ['First published', post.data.book.firstPublished],
+      ['Edition', post.data.book.edition],
+      ['Pages', post.data.book.pages?.toString()],
+      ['ISBN', post.data.book.isbn],
+      ['Language', post.data.book.language],
+      ['Genre', post.data.book.genre],
+      ['Read in', post.data.book.readIn],
+      ['My rating', post.data.book.rating],
+    ].filter(([, value]) => value)
+  : [];
+
+function spotifyEmbedUrl(url: string) {
+  const match = url.match(/open\.spotify\.com\/(album|playlist|track|episode|show)\/([A-Za-z0-9]+)/);
+  if (!match) return undefined;
+
+  return `https://open.spotify.com/embed/${match[1]}/${match[2]}?utm_source=generator&theme=0`;
+}
+
+const spotifySrc = post.data.soundtrack ? spotifyEmbedUrl(post.data.soundtrack.spotifyUrl) : undefined;
 ---
 
 <Base title={`${post.data.title} — ctrlFG`} description={post.data.description}>
   <article>
-    <header class="post-head">
-      <p class="date mono">{fmt.format(post.data.date)}</p>
-      <h1 transition:name={`title-${post.id}`}>{post.data.title}</h1>
-      <p class="tags">
-        {post.data.tags.map((t) => <span class="pill">{t}</span>)}
-      </p>
-      {
-        post.data.cover && (
-          <Image
-            src={post.data.cover}
-            alt={post.data.coverAlt ?? ''}
-            width={1200}
-            class="cover"
-            transition:name={`cover-${post.id}`}
-          />
-        )
-      }
-    </header>
+    {
+      isBookclub && post.data.book ? (
+        <header class="post-head book-head">
+          <p class="date mono">{fmt.format(post.data.date)}</p>
+          <h1 transition:name={`title-${post.id}`}>{post.data.title}</h1>
+          <p class="tags">
+            {post.data.tags.map((t) => <span class="pill">{t}</span>)}
+          </p>
+
+          <div class="book-body">
+            <aside class="book-side">
+              {post.data.cover ? (
+                <Image
+                  src={post.data.cover}
+                  alt={post.data.coverAlt ?? `Cover of ${post.data.book.title}`}
+                  width={360}
+                  class="book-cover"
+                  transition:name={`cover-${post.id}`}
+                />
+              ) : (
+                post.data.book.coverUrl && (
+                  <img
+                    src={post.data.book.coverUrl}
+                    alt={post.data.coverAlt ?? `Cover of ${post.data.book.title}`}
+                    class="book-cover"
+                    loading="eager"
+                    transition:name={`cover-${post.id}`}
+                  />
+                )
+              )}
+
+              {post.data.soundtrack && spotifySrc && (
+                <section class="soundtrack" aria-labelledby="soundtrack-title">
+                  <h2 id="soundtrack-title">Reading soundtrack</h2>
+                  <p class="mono">
+                    {post.data.soundtrack.title}
+                    {post.data.soundtrack.artist && ` · ${post.data.soundtrack.artist}`}
+                  </p>
+                  <iframe
+                    title={`Spotify embed: ${post.data.soundtrack.title}`}
+                    src={spotifySrc}
+                    width="100%"
+                    height="152"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                  ></iframe>
+                </section>
+              )}
+            </aside>
+
+            <section class="book-card" aria-label="Book details">
+              <p class="kicker mono">Book datasheet</p>
+              <h2>{post.data.book.title}</h2>
+              <dl>
+                {bookFacts.map(([label, value]) => (
+                  <>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </>
+                ))}
+              </dl>
+              <p class="book-links mono">
+                {post.data.book.sourceUrl && <a href={post.data.book.sourceUrl} data-sound="tick">book data</a>}
+                {post.data.book.goodreadsUrl && <a href={post.data.book.goodreadsUrl} data-sound="tick">Goodreads</a>}
+                {post.data.soundtrack && <a href={post.data.soundtrack.spotifyUrl} data-sound="tick">Spotify</a>}
+              </p>
+            </section>
+          </div>
+        </header>
+      ) : (
+        <header class="post-head">
+          <p class="date mono">{fmt.format(post.data.date)}</p>
+          <h1 transition:name={`title-${post.id}`}>{post.data.title}</h1>
+          <p class="tags">
+            {post.data.tags.map((t) => <span class="pill">{t}</span>)}
+          </p>
+          {post.data.cover && (
+            <Image
+              src={post.data.cover}
+              alt={post.data.coverAlt ?? ''}
+              width={1200}
+              class="cover"
+              transition:name={`cover-${post.id}`}
+            />
+          )}
+        </header>
+      )
+    }
     <div class="prose">
       <Content />
     </div>
@@ -54,4 +150,82 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', ye
   .prose { max-width: 62ch; }
   .prose :global(img) { border-radius: 12px; }
   .back { margin-top: 3rem; }
+
+  .book-head h1 { margin-top: 0.2em; }
+  .book-body {
+    display: grid;
+    grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+    margin-top: 1.5rem;
+  }
+  .book-side {
+    display: grid;
+    gap: 1rem;
+  }
+  .book-cover {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 12px 30px rgb(31 61 43 / 0.16);
+  }
+  .book-card {
+    background: var(--paper-deep);
+    border-radius: 8px;
+    padding: 1rem 1.15rem;
+  }
+  .book-card .kicker {
+    color: var(--leaf);
+    margin: 0 0 0.35rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+  .book-card h2 {
+    margin: 0 0 0.8rem;
+    font-size: 1.25rem;
+  }
+  .book-card dl {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 0.35rem 0.8rem;
+    margin: 0;
+  }
+  .book-card dt {
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+  .book-card dd { margin: 0; }
+  .book-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.9rem 0 0;
+    font-size: 0.75rem;
+  }
+  .soundtrack {
+    background: var(--paper-deep);
+    border-radius: 8px;
+    padding: 0.8rem;
+  }
+  .soundtrack h2 {
+    font-size: 1rem;
+    margin: 0;
+  }
+  .soundtrack p {
+    color: var(--ink-soft);
+    margin: 0.25rem 0 0.65rem;
+    font-size: 0.75rem;
+  }
+  .soundtrack iframe {
+    display: block;
+    border: 0;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 700px) {
+    .book-body { grid-template-columns: 1fr; }
+    .book-side { max-width: 16rem; }
+    .book-card dl { grid-template-columns: 1fr; }
+    .book-card dt { margin-top: 0.35rem; }
+  }
 </style>
